@@ -1,6 +1,6 @@
 import React from 'react'
 import { navIcons, navLinks } from './constants'
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 
 
 const Navbar = () => {
@@ -26,7 +26,7 @@ const Navbar = () => {
                     </li>
                 ))}
             </ul>
-            <time>{dayjs().format('ddd MMM D h:mm A')}</time>
+            <time>{new Date().toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true })}</time>
         </div>
     </nav>
   )
