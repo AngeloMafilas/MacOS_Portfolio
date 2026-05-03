@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "#components/*": ["src/components/*"],
+      "#constants/*": ["src/constants/*"],
+      "#hoc/*": ["src/hoc/*"],
+      "#store/*": ["src/store/*"],
+      "#views/*": ["src/views/*"],
+      "#windows/*": ["src/windows/*"]
+    },
+    "jsx": "react-jsx"
+  },
+  "include": ["src/**/*"]
+}
