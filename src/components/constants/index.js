@@ -124,6 +124,14 @@ const techStack = [
     category: "Dev Tools",
     items: ["Git", "GitHub", "Docker"],
   },
+  {
+    category: "AI / ML",
+    items: ["Claude API", "Groq", "LangChain", "RAG", "Vector DBs", "Prompt Engineering", "TensorFlow (in progress)"],
+  },
+  {
+    category: "Cloud / Services",
+    items: ["Vercel", "Firebase", "Supabase"],
+  }
 ];
 
 const socials = [
@@ -132,28 +140,28 @@ const socials = [
     text: "Github",
     icon: "/icons/github.svg",
     bg: "#f4656b",
-    link: "https://github.com/JavaScript-Mastery-Pro",
+    link: "https://github.com/AngeloMafilas",
   },
   {
     id: 2,
-    text: "Platform",
-    icon: "/icons/atom.svg",
-    bg: "#4bcb63",
-    link: "https://jsmastery.com/",
-  },
-  {
-    id: 3,
-    text: "Twitter/X",
-    icon: "/icons/twitter.svg",
-    bg: "#ff866b",
-    link: "https://x.com/jsmasterypro",
-  },
-  {
-    id: 4,
     text: "LinkedIn",
     icon: "/icons/linkedin.svg",
     bg: "#05b6f6",
-    link: "https://www.linkedin.com/company/javascriptmastery/posts/?feedView=all",
+    link: "https://www.linkedin.com/in/angelo-mafilas-07101b314",
+  },
+  {
+    id: 3,
+    text: "Email",
+    icon: "/icons/email.svg",
+    bg: "#ea4335",
+    link: "mailto:angelomafilas33@gmail.com",
+  },
+  {
+    id: 4,
+    text: "Portfolio",
+    icon: "/icons/portfolio.svg",
+    bg: "#4b79a1",
+    link: "https://github.com/AngeloMafilas/MacOS_Portfolio",
   },
 ];
 
@@ -427,10 +435,8 @@ const ABOUT_LOCATION = {
       subtitle: "Meet the Developer Behind the Code",
       image: "/images/adrian.jpg",
       description: [
-        "Hey! I’m Adrian 👋, a web developer who enjoys building sleek, interactive websites that actually work well.",
-        "I specialize in JavaScript, React, and Next.js—and I love making things feel smooth, fast, and just a little bit delightful.",
-        "I’m big on clean UI, good UX, and writing code that doesn’t need a search party to debug.",
-        "Outside of dev work, you'll find me tweaking layouts at 2AM, sipping overpriced coffee, or impulse-buying gadgets I absolutely convinced myself I needed 😅",
+        "Full-stack engineer and AI practitioner with a Pearson BTEC HND in Software Engineering and professional mobile app development experience (Flutter/Firebase, Red Jaguar Marketing). Over the past two years I have independently shipped six production-grade projects, a full-stack Spotify clone with real-time chat and AI integration, a RAG document Q&A pipeline, an AI code review agent, and a multi-agent AI system currently in development.",
+        "I work across the full stack (React, Next.js, Node.js, Vue/Nuxt, Python) and build practical AI products using the Claude API, Groq, LangChain, and vector databases. I am actively pursuing junior software and AI engineering roles.",
       ],
     },
   ],
@@ -445,7 +451,7 @@ const RESUME_LOCATION = {
   children: [
     {
       id: 1,
-      name: "Resume.pdf",
+      name: "Vassili Angelo Mafilas – Resume.pdf",
       icon: "/images/pdf.png",
       kind: "file",
       fileType: "pdf",
