@@ -536,7 +536,7 @@ const Finder = () => {
                                     <div className="flex gap-6 h-full">
                                         <div className="flex-1">
                                             {(filteredChildren.length > 0) ? (
-                                                <div className="grid grid-cols-[repeat(auto-fill,minmax(84px,1fr))] gap-y-4 gap-x-2">
+                                                <div className="grid grid-cols-2 gap-4">
                                                     {filteredChildren.map((item, idx) => {
                                                         const uid = item.node_id || item.id || item.url || item.name;
                                                         return (
