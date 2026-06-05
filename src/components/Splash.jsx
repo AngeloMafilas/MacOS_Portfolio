@@ -107,6 +107,15 @@ export default function Splash({ onComplete }) {
   const inputRef = useRef(null)
   const videoRef = useRef(null)
   const terminalBodyRef = useRef(null)
+
+  // Autoplay video silently on component mount to avoid delay when entering experience
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // ignore autoplay restrictions; video will start on user interaction
+      })
+    }
+  }, [])
   const terminalRef = useRef(null)
   const loginDate = useRef(formatLoginDate()).current
 
@@ -127,9 +136,12 @@ export default function Splash({ onComplete }) {
   const handleEnter = () => {
     setEntered(true);
     if (videoRef.current) {
-      videoRef.current.currentTime = 0;
+      // Unmute video; it is already playing muted from mount
       videoRef.current.muted = false;
-      videoRef.current.play().catch((err) => console.log('Audio playback failed:', err));
+      // Ensure playback continues
+      videoRef.current.play().catch(() => {
+        // ignore playback errors due to restrictions
+      });
     }
     // Auto-focus terminal input after entering
     setTimeout(() => {
@@ -245,6 +257,7 @@ export default function Splash({ onComplete }) {
         loop
         muted
         playsInline
+        autoPlay
       />
 
       {/* ── Overlays ── */}
