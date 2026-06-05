@@ -114,10 +114,10 @@ const Terminal = () => {
         Removed mt-20 and rounded-xl. Made width/height full so it expands to the #terminal section. 
         Gave it a min-height so it doesn't collapse.
       */}
-      <div className="flex flex-col w-full h-full min-h-[450px] bg-[#1e1e1e] overflow-hidden">
+      <div className="flex flex-col w-[min(90vw,560px)] h-[min(500px,80vh)] bg-[#1e1e1e] overflow-hidden">
         {/* Title Bar */}
         <div 
-          className="flex items-center px-4 py-3 bg-[#2d2d2d] border-b border-black/30 w-full"
+          className="window-header flex items-center px-4 py-3 bg-[#2d2d2d] border-b border-black/30 w-full cursor-grab active:cursor-grabbing"
           onMouseDown={() => focusWindow('terminal')}
         >
           <div className="flex gap-2">
@@ -142,7 +142,7 @@ const Terminal = () => {
         {/* Terminal Body */}
         <div 
           ref={terminalRef}
-          className="flex-1 p-6 font-mono text-[14px] overflow-y-auto custom-scrollbar w-full"
+          className="flex-1 p-6 font-mono text-[14px] overflow-y-auto overscroll-contain custom-scrollbar w-full"
         >
           {lines.map((line, i) => (
             <div key={i} className={`whitespace-pre-wrap leading-relaxed ${getLineClass(line.type)}`}>

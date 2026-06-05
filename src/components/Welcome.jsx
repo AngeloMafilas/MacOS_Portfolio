@@ -82,7 +82,7 @@ const Welcome = () => {
             {renderText({text: "Hey, I'm Angelo Welcome to my", baseWeight: 600})}
         </p>
         <h1 ref={titleRef} className="mt-7">
-            {renderText({text: "portfolio", className: "text-9xl italic font-georama",   baseWeight: 100})}
+            {renderText({text: "portfolio", className: "text-8xl italic font-georama",   baseWeight: 100})}
         </h1>
         <div className='small-screen'>
             {renderText({text: "This Portfolio is designed for desktop/tablet screens", baseWeight: 600})}

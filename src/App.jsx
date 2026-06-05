@@ -1,21 +1,39 @@
-import React from 'react'
-import { Navbar, Welcome, Dock } from "./components";
+import React, { useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
+import { Navbar, Welcome, Dock, Desktop } from "./components";
 import { Draggable } from 'gsap/Draggable';
 import gsap from 'gsap';
-import { Terminal } from "./windows";
-import WindowWrapper from './hoc/WindowWrapper';
+import { Terminal, Safari, Resume, Finder, TextFile, ImageFile, Contact } from "./windows";
+import Splash from './components/Splash';
 
 gsap.registerPlugin(Draggable); 
 
 const App = () => {
-  return (
-    <main>
-      <Navbar />
-      <Welcome />
-      <Dock />
+  const [started, setStarted] = useState(false)
 
-      <Terminal />
-    </main>
+  return (
+    <>
+      <AnimatePresence>
+        {!started && <Splash onComplete={() => setStarted(true)} />}
+      </AnimatePresence>
+
+      {started && (
+        <main>
+          <Navbar />
+          <Welcome />
+          <Desktop />
+          <Dock />
+
+          <Terminal />
+          <Safari />
+          <Resume />
+          <Finder />
+          <TextFile />
+          <ImageFile />
+          <Contact />
+        </main>
+      )}
+    </>
   );
 }
 
