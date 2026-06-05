@@ -23,6 +23,17 @@ query {
 }
 `;
 
+const LANGUAGE_COLORS = {
+    JavaScript: '#f1e05a',
+    TypeScript: '#3178c6',
+    HTML: '#e34c26',
+    CSS: '#563d7c',
+    Vue: '#41b883',
+    Python: '#3572A5',
+    Shell: '#89e051',
+};
+const getLanguageColor = (lang) => LANGUAGE_COLORS[lang] || '#858585';
+
 const useGithubStore = create((set, get) => ({
     pinnedRepos: [],
     repoContents: {}, // { repoName: [files] }
@@ -32,24 +43,61 @@ const useGithubStore = create((set, get) => ({
 
     fetchPinnedRepos: async () => {
         const token = import.meta.env.VITE_GITHUB_TOKEN;
-        if (!token) return;
         set({ isPinnedLoading: true, error: null });
+        
+        if (token) {
+            try {
+                const res = await fetch('https://api.github.com/graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github+json',
+                    },
+                    body: JSON.stringify({ query: PINNED_QUERY }),
+                });
+                const result = await res.json();
+                if (result.errors) throw new Error(result.errors[0].message);
+                const repos = result.data.user.pinnedItems.nodes.map(repo => ({
+                    ...repo,
+                    imageUrl: repo.openGraphImageUrl
+                }));
+                set({ pinnedRepos: repos, isPinnedLoading: false });
+                return;
+            } catch (err) {
+                console.warn("GitHub GraphQL API failed, falling back to REST API:", err);
+            }
+        }
+
+        // Fallback to Public REST API
         try {
-            const res = await fetch('https://api.github.com/graphql', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/vnd.github+json',
-                },
-                body: JSON.stringify({ query: PINNED_QUERY }),
-            });
-            const result = await res.json();
-            if (result.errors) throw new Error(result.errors[0].message);
-            const repos = result.data.user.pinnedItems.nodes.map(repo => ({
-                ...repo,
-                imageUrl: repo.openGraphImageUrl
+            const headers = {
+                'Accept': 'application/vnd.github+json',
+            };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            const res = await fetch('https://api.github.com/users/AngeloMafilas/repos?sort=updated&per_page=12', { headers });
+            if (!res.ok) throw new Error(`Failed to fetch repositories: ${res.statusText}`);
+            const data = await res.json();
+            
+            const repos = data.map(repo => ({
+                name: repo.name,
+                description: repo.description,
+                url: repo.html_url,
+                homepageUrl: repo.homepage,
+                stargazerCount: repo.stargazers_count,
+                openGraphImageUrl: `https://opengraph.githubassets.com/1/AngeloMafilas/${repo.name}`,
+                imageUrl: `https://opengraph.githubassets.com/1/AngeloMafilas/${repo.name}`,
+                primaryLanguage: repo.language ? {
+                    name: repo.language,
+                    color: getLanguageColor(repo.language)
+                } : null,
+                repositoryTopics: {
+                    nodes: repo.topics ? repo.topics.map(t => ({ topic: { name: t } })) : []
+                }
             }));
+            
             set({ pinnedRepos: repos, isPinnedLoading: false });
         } catch (err) {
             set({ error: err.message, isPinnedLoading: false });
@@ -59,18 +107,20 @@ const useGithubStore = create((set, get) => ({
 
     fetchRepoContents: async (repoName) => {
         const token = import.meta.env.VITE_GITHUB_TOKEN;
-        if (!token) return;
         
         // Don't refetch if we already have it
         if (get().repoContents[repoName]) return;
 
         set({ isContentsLoading: true });
         try {
+            const headers = { 
+                'Accept': 'application/vnd.github+json',
+            };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
             const res = await fetch(`https://api.github.com/repos/AngeloMafilas/${repoName}/contents`, {
-                headers: { 
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/vnd.github+json',
-                }
+                headers
             });
             const data = await res.json();
             
@@ -92,7 +142,7 @@ const useGithubStore = create((set, get) => ({
                  f.name.toLowerCase().includes('screenshot') || 
                  f.name.toLowerCase().includes('thumbnail') ||
                  f.name.toLowerCase().includes('banner')) &&
-                ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(f.name.split('.').pop().toLowerCase())
+                 ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(f.name.split('.').pop().toLowerCase())
             );
 
             if (previewFile) {
