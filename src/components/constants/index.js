@@ -451,12 +451,12 @@ const RESUME_LOCATION = {
   children: [
     {
       id: 1,
-      name: "Vassili Angelo Mafilas – Resume.pdf",
+      name: "Angelo_Mafilas_Resume_2027.pdf",
       icon: "/images/pdf.png",
       kind: "file",
       fileType: "pdf",
       // you can add `href` if you want to open a hosted resume
-      // href: "/your/resume/path.pdf",
+      // href: "/files/Angelo_Mafilas_Resume_2027.pdf",
     },
   ],
 };

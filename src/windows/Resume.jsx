@@ -26,8 +26,8 @@ const Resume = () => {
             Resume.pdf
           </div>
           <a 
-            href="/files/resume.pdf" 
-            download="Angelo_Resume.pdf"
+            href="/files/Angelo_Mafilas_Resume_2027.pdf" 
+            download="Angelo_Mafilas_Resume_2027.pdf"
             className="absolute right-0 flex items-center justify-center w-8 h-8 rounded hover:bg-black/10 transition-colors cursor-pointer text-[#404040]/60 hover:text-black"
             title="Download Resume"
           >
@@ -48,7 +48,7 @@ const Resume = () => {
         )}
 
         <Document 
-          file="/files/resume.pdf"
+          file="/files/Angelo_Mafilas_Resume_2027.pdf"
           className="w-full flex justify-center pt-6"
           loading={null}
         >
