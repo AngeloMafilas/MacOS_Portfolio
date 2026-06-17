@@ -5,17 +5,22 @@ import { Draggable } from 'gsap/Draggable';
 import gsap from 'gsap';
 import { Terminal, Safari, Resume, Finder, TextFile, ImageFile, Contact } from "./windows";
 import Splash from './components/Splash';
+import useIsMobile from './store/mobileblocker'
+import MobileBlocker from './components/constants/MobileBlocker'
 
 gsap.registerPlugin(Draggable); 
 
 const App = () => {
   const [started, setStarted] = useState(false)
+  const isMobile = useIsMobile()
 
   return (
     <>
       <AnimatePresence>
         {!started && <Splash onComplete={() => setStarted(true)} />}
       </AnimatePresence>
+
+if (isMobile) return <MobileBlocker />
 
       {started && (
         <main>
