@@ -126,7 +126,7 @@ export default function Splash({ onComplete }) {
   /* handle entering the portfolio and starting the video safely */
   const handleEnter = () => {
     setEntered(true)
-    
+
     if (videoRef.current) {
       // 1. Unmute video to allow full system audio output
       videoRef.current.muted = false
@@ -267,7 +267,7 @@ export default function Splash({ onComplete }) {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
-            <motion.div 
+            <motion.div
               className="splash-enter-card"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -365,21 +365,6 @@ export default function Splash({ onComplete }) {
               ))}
 
               {/* active prompt */}
-{!booting && (
-  <p className="splash-term-line splash-prompt-line">
-    <span style={{ color: '#00ff88' }}>angelo@portfolio ~ $&nbsp;</span>
-    <span style={{ color: '#00ff88' }}>{terminalInput}</span>
-    <span
-      className="splash-cursor"
-      style={{ opacity: cursorVisible ? 1 : 0 }}
-    >
-      ▌
-    </span>
-    {terminalInput.length === 0 && (
-      <span className="splash-ghost-text" aria-hidden="true">
-        npm run start
-      </span>
-    )}
               {!booting && (
                 <p className="splash-term-line splash-prompt-line">
                   <span style={{ color: '#00ff88' }}>angelo@portfolio ~ $&nbsp;</span>
@@ -397,19 +382,19 @@ export default function Splash({ onComplete }) {
                   )}
                 </p>
               )}
-
-              {/* Hidden input to capture keyboard */}
-              <input
-                ref={inputRef}
-                className="splash-hidden-input"
-                value={terminalInput}
-                onChange={(e) => !booting && setTerminalInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                autoFocus
-                spellCheck={false}
-                autoComplete="off"
-              />
             </div>
+
+            {/* Hidden input to capture keyboard */}
+            <input
+              ref={inputRef}
+              className="splash-hidden-input"
+              value={terminalInput}
+              onChange={(e) => !booting && setTerminalInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoFocus
+              spellCheck={false}
+              autoComplete="off"
+            />
           </motion.div>
         </div>
       </div>
