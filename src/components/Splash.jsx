@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import heroVideo from '../assets/hero_section.mp4'
+import heroVideo from '../assets/hero_vid.mp4'
 import './Splash.css'
 
 /* ─── Titles that the typewriter cycles through ─── */
@@ -107,15 +107,6 @@ export default function Splash({ onComplete }) {
   const inputRef = useRef(null)
   const videoRef = useRef(null)
   const terminalBodyRef = useRef(null)
-
-  // Autoplay video silently on component mount to avoid delay when entering experience
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {
-        // ignore autoplay restrictions; video will start on user interaction
-      })
-    }
-  }, [])
   const terminalRef = useRef(null)
   const loginDate = useRef(formatLoginDate()).current
 
@@ -132,30 +123,33 @@ export default function Splash({ onComplete }) {
     }
   }, [terminalLines, terminalInput])
 
-  /* handle entering the portfolio and unmuting */
+  /* handle entering the portfolio and starting the video safely */
   const handleEnter = () => {
-    setEntered(true);
+    setEntered(true)
+    
     if (videoRef.current) {
-      // Unmute video; it is already playing muted from mount
-      videoRef.current.muted = false;
-      // Ensure playback continues
-      videoRef.current.play().catch(() => {
-        // ignore playback errors due to restrictions
-      });
+      // 1. Unmute video to allow full system audio output
+      videoRef.current.muted = false
+      // 2. Snap timeline back to exact 0.0s to ensure user sees everything
+      videoRef.current.currentTime = 0
+      // 3. Play video directly within the interaction frame to skip browser blocking
+      videoRef.current.play().catch((error) => {
+        console.error("Playback was prevented or failed:", error)
+      })
     }
-    // Auto-focus terminal input after entering
+
+    // Auto-focus terminal input after entering transition completes
     setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-  };
+      inputRef.current?.focus()
+    }, 100)
+  }
 
   /* focus the hidden input on terminal click */
   const focusInput = useCallback(() => {
     if (entered) {
-      inputRef.current?.focus();
+      inputRef.current?.focus()
     }
   }, [entered])
-
 
   /* ─── type a line character-by-character ─── */
   const typeLine = useCallback((text, color = '#00ff88') => {
@@ -248,7 +242,7 @@ export default function Splash({ onComplete }) {
       className={`splash-root ${transitionPhase === 'glitch' ? 'splash-glitch' : ''}`}
       onClick={focusInput}
     >
-      {/* ── Video background (starts paused at 0s, starts on user action) ── */}
+      {/* ── Video background (Synchronized with Enter action) ── */}
       <video
         ref={videoRef}
         className="splash-video"
@@ -257,7 +251,6 @@ export default function Splash({ onComplete }) {
         loop
         muted
         playsInline
-        autoPlay
       />
 
       {/* ── Overlays ── */}
@@ -307,97 +300,97 @@ export default function Splash({ onComplete }) {
       <div className="splash-content" style={{ visibility: entered ? 'visible' : 'hidden' }}>
         {/* Left column: name + typewriter */}
         <div className="splash-left">
-        {/* Name */}
-        <motion.h1
-          className="splash-name"
-          initial={{ opacity: 0, y: 30 }}
-          animate={entered ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-        >
-          ANGELO<br /><span className="splash-lastname">MAFILAS</span>
-        </motion.h1>
+          {/* Name */}
+          <motion.h1
+            className="splash-name"
+            initial={{ opacity: 0, y: 30 }}
+            animate={entered ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
+            ANGELO<br /><span className="splash-lastname">MAFILAS</span>
+          </motion.h1>
 
-        {/* Typewriter */}
-        <motion.p
-          className="splash-typewriter"
-          initial={{ opacity: 0 }}
-          animate={entered ? { opacity: 1 } : {}}
-          transition={{ delay: 0.3, duration: 0.4 }}
-        >
-          {entered && typewriterText}
-          <span className="splash-typewriter-cursor">|</span>
-        </motion.p>
+          {/* Typewriter */}
+          <motion.p
+            className="splash-typewriter"
+            initial={{ opacity: 0 }}
+            animate={entered ? { opacity: 1 } : {}}
+            transition={{ delay: 0.3, duration: 0.4 }}
+          >
+            {entered && typewriterText}
+            <span className="splash-typewriter-cursor">|</span>
+          </motion.p>
         </div>
 
         {/* Right column: Terminal */}
         <div className="splash-right">
-        <motion.div
-          ref={terminalRef}
-          className={`splash-terminal ${transitionPhase === 'pulse' ? 'splash-terminal-pulse' : ''}`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={entered ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.8, duration: 0.5, ease: 'easeOut' }}
-        >
-          {/* scanline on pulse */}
-          {transitionPhase === 'pulse' && <div className="splash-scanline" />}
+          <motion.div
+            ref={terminalRef}
+            className={`splash-terminal ${transitionPhase === 'pulse' ? 'splash-terminal-pulse' : ''}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={entered ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.8, duration: 0.5, ease: 'easeOut' }}
+          >
+            {/* scanline on pulse */}
+            {transitionPhase === 'pulse' && <div className="splash-scanline" />}
 
-          {/* Terminal header */}
-          <div className="splash-terminal-header">
-            <div className="splash-traffic-lights">
-              <span className="splash-tl-red" />
-              <span className="splash-tl-yellow" />
-              <span className="splash-tl-green" />
+            {/* Terminal header */}
+            <div className="splash-terminal-header">
+              <div className="splash-traffic-lights">
+                <span className="splash-tl-red" />
+                <span className="splash-tl-yellow" />
+                <span className="splash-tl-green" />
+              </div>
+              <span className="splash-terminal-title">angelo@portfolio ~</span>
+              <div className="splash-traffic-lights" style={{ visibility: 'hidden' }}>
+                <span /><span /><span />
+              </div>
             </div>
-            <span className="splash-terminal-title">angelo@portfolio ~</span>
-            <div className="splash-traffic-lights" style={{ visibility: 'hidden' }}>
-              <span /><span /><span />
+
+            {/* Terminal body */}
+            <div className="splash-terminal-body" ref={terminalBodyRef}>
+              <p className="splash-term-line" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                Last login: {loginDate}
+              </p>
+              <p className="splash-term-line">&nbsp;</p>
+
+              {/* history lines */}
+              {terminalLines.map((line) => (
+                <p key={line.id} className="splash-term-line" style={{ color: line.color }}>
+                  {line.text}
+                  {line.typing && (
+                    <span className="splash-typewriter-cursor" style={{ color: line.color }}>▌</span>
+                  )}
+                </p>
+              ))}
+
+              {/* active prompt */}
+              {!booting && (
+                <p className="splash-term-line splash-prompt-line">
+                  <span style={{ color: '#00ff88' }}>angelo@portfolio ~ $&nbsp;</span>
+                  <span style={{ color: '#00ff88' }}>{terminalInput}</span>
+                  <span
+                    className="splash-cursor"
+                    style={{ opacity: cursorVisible ? 1 : 0 }}
+                  >
+                    ▌
+                  </span>
+                </p>
+              )}
             </div>
-          </div>
 
-          {/* Terminal body */}
-          <div className="splash-terminal-body" ref={terminalBodyRef}>
-            <p className="splash-term-line" style={{ color: 'rgba(255,255,255,0.5)' }}>
-              Last login: {loginDate}
-            </p>
-            <p className="splash-term-line">&nbsp;</p>
-
-            {/* history lines */}
-            {terminalLines.map((line) => (
-              <p key={line.id} className="splash-term-line" style={{ color: line.color }}>
-                {line.text}
-                {line.typing && (
-                  <span className="splash-typewriter-cursor" style={{ color: line.color }}>▌</span>
-                )}
-              </p>
-            ))}
-
-            {/* active prompt */}
-            {!booting && (
-              <p className="splash-term-line splash-prompt-line">
-                <span style={{ color: '#00ff88' }}>angelo@portfolio ~ $&nbsp;</span>
-                <span style={{ color: '#00ff88' }}>{terminalInput}</span>
-                <span
-                  className="splash-cursor"
-                  style={{ opacity: cursorVisible ? 1 : 0 }}
-                >
-                  ▌
-                </span>
-              </p>
-            )}
-          </div>
-
-          {/* Hidden input to capture keyboard */}
-          <input
-            ref={inputRef}
-            className="splash-hidden-input"
-            value={terminalInput}
-            onChange={(e) => !booting && setTerminalInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            autoFocus
-            spellCheck={false}
-            autoComplete="off"
-          />
-        </motion.div>
+            {/* Hidden input to capture keyboard */}
+            <input
+              ref={inputRef}
+              className="splash-hidden-input"
+              value={terminalInput}
+              onChange={(e) => !booting && setTerminalInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoFocus
+              spellCheck={false}
+              autoComplete="off"
+            />
+          </motion.div>
         </div>
       </div>
 
