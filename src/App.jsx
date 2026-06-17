@@ -14,13 +14,13 @@ const App = () => {
   const [started, setStarted] = useState(false)
   const isMobile = useIsMobile()
 
+  if (isMobile) return <MobileBlocker />
+
   return (
     <>
       <AnimatePresence>
         {!started && <Splash onComplete={() => setStarted(true)} />}
       </AnimatePresence>
-
-if (isMobile) return <MobileBlocker />
 
       {started && (
         <main>
