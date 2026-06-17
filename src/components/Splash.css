@@ -544,3 +544,10 @@
   margin-top: -100vmax;
   margin-left: -100vmax;
 }
+
+.splash-ghost-text {
+  color: rgba(255, 255, 255, 0.28);
+  margin-left: 2px;
+  pointer-events: none;
+  user-select: none;
+}
